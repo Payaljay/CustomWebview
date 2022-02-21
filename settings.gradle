@@ -1,0 +1,3 @@
+rootProject.name = "Moby Launcher"
+include ':app'
+include ':myapplication'
