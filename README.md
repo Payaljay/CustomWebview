@@ -14,7 +14,7 @@ allprojects {
 Declare the Gradle dependency in your app module's build.gradle
 
 dependencies {
-  implementation 'com.github.Payaljay:CustomWebview:v1.0.2'
+  implementation 'com.github.Payaljay:CustomWebview:v1.0.4'
 }
 
 
