@@ -1,11 +1,8 @@
 package com.mobysampletest;
 
-import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -13,12 +10,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+
+import app.dev.myapplication.FinestWebViewBuilder;
 
 public class MainActivity extends AppCompatActivity {
 
     LinearLayout moLlLauncher;
+    private static final String TEST_PAGE_URL = "https://app.mobyads.in/publisher/A01234567/?fsMobile=918140663133&fsEmail=johndeo@gmail.com&fsFirstName=Chirag&fsLastName=Kheni&fiDeviceType=0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +39,14 @@ public class MainActivity extends AppCompatActivity {
         moLlLauncher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent loIntent = new Intent(MainActivity.this, WebActivity.class);
-                startActivity(loIntent);
+                // Intent loIntent = new Intent(MainActivity.this, WebActivity.class);
+                // startActivity(loIntent);
+                FinestWebViewBuilder builder = new FinestWebViewBuilder().
+                        setAccessStorage(true).
+                        setAccessGPS(true).
+                        setUrl(TEST_PAGE_URL).
+                        build();
+                builder.loadWebView();
             }
         });
 

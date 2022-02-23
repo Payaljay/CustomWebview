@@ -1,4 +1,4 @@
-package com.mobysampletest;
+package app.dev.myapplication;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,26 +10,32 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import app.dev.myapplication.MyWebview;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 public class WebActivity extends AppCompatActivity implements MyWebview.Listener {
-    private static final String TEST_PAGE_URL = "https://app.mobyads.in/publisher/A01234567/?fsMobile=" +
-            "918140663133&fsEmail=johndeo@gmail.com&fsFirstName=Chirag&fsLastName=Kheni&fiDeviceType=0";
+    /*   private static final String TEST_PAGE_URL = "https://app.mobyads.in/publisher/A01234567/?fsMobile=" +
+               "918140663133&fsEmail=johndeo@gmail.com&fsFirstName=Chirag&fsLastName=Kheni&fiDeviceType=0";*/
     MyWebview mWebView;
+    String url;
+    boolean isAccessStorage, isAccessGPS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
 
+        if (getIntent() != null) {
+            url = getIntent().getStringExtra("url");
+            isAccessGPS = getIntent().getBooleanExtra("isAccessGPS", false);
+            isAccessStorage = getIntent().getBooleanExtra("isAccessStorage", false);
+        }
         mWebView = findViewById(R.id.web);
         mWebView.setListener(this, this);
-        mWebView.setGeolocationEnabled(true);
+        mWebView.setGeolocationEnabled(isAccessGPS);
+        mWebView.setAccessStorage(isAccessStorage);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -45,8 +51,8 @@ public class WebActivity extends AppCompatActivity implements MyWebview.Listener
             }
 
         });
-        mWebView.addHttpHeader("Referer", "https://mobyads.in/");
-        mWebView.loadUrl(TEST_PAGE_URL);
+        //mWebView.addHttpHeader("Referer", "https://mobyads.in/");
+        mWebView.loadUrl(url);
     }
 
     @Override

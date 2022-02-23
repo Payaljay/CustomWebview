@@ -90,6 +90,7 @@ public class MyWebview extends WebView {
     LocationRequest mLocationRequest;
     protected Listener mListener;
     protected long mLastError;
+    private boolean isStoragePermission;
 
     public MyWebview(Context context) {
         super(context);
@@ -119,9 +120,9 @@ public class MyWebview extends WebView {
             mActivity = new WeakReference<Activity>((Activity) context);
         }
         // i am not sure with these inflater lines
-        //  LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // you should not use a new instance of MyWebView here
-        // MyWebView view = (MyWebView) inflater.inflate(R.layout.custom_webview, this);
+        // MyWebview view = (MyWebView) inflater.inflate(R.layout.custom_webview, this);
         CookieManager.getInstance().setAcceptThirdPartyCookies(this, true);
         this.getSettings().setJavaScriptEnabled(true);
         this.getSettings().setLoadWithOverviewMode(true);
@@ -200,13 +201,15 @@ public class MyWebview extends WebView {
                 // Double check that we don't have any existing callbacks
                 Log.d("TTT", "onShowFileChooser..");
 
-                if (mUploadMessage != null) {
-                    mUploadMessage.onReceiveValue(null);
-                }
-                mUploadMessage = filePath;
-                //checkWritePermission();
-                if (checkAndRequestMultiplePermissions()) {
-                    fileChoose();
+                if (isStoragePermission) {
+                    if (mUploadMessage != null) {
+                        mUploadMessage.onReceiveValue(null);
+                    }
+                    mUploadMessage = filePath;
+                    //checkWritePermission();
+                    if (checkAndRequestMultiplePermissions()) {
+                        fileChoose();
+                    }
                 }
                 return true;
             }
@@ -267,6 +270,10 @@ public class MyWebview extends WebView {
     public void setGeolocationEnabled(final boolean enabled) {
         //  isGPSSettingCall = enabled;
         getSettings().setGeolocationEnabled(enabled);
+    }
+
+    public void setAccessStorage(boolean isStoragePermission) {
+        this.isStoragePermission = isStoragePermission;
     }
 
     public class JavaScriptInterface {
